@@ -30,7 +30,7 @@ class CallsBackupControl:
                     logging.warn('unsupported tag: %s', elem.tag)
         return calls
 
-    def build_calls_tree(self, calls):
+    def build_tree(self, calls):
         root = ET.Element('calls', attrib={'count': str(len(calls))})
         for call in calls:
             ET.SubElement(root, 'call', attrib=call._asdict())
