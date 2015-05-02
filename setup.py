@@ -20,7 +20,7 @@ from setuptools.command.test import test as TestCommand
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = []
+        self.test_args = ['--cov-report', 'term', '--cov', 'phone_communication_backup_coalescer']
         self.test_suite = True
 
     def run_tests(self):
@@ -72,7 +72,7 @@ setup(
 
     install_requires=[],
 
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pytest-cov'],
     cmdclass={'test': PyTest},
 
     extras_require = {
