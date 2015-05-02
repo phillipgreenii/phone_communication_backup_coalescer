@@ -1,9 +1,18 @@
 class ParseSupport:
 
+    def __init__(self):
+        self.seen_field_warnings = {}
+
     def mark_field_difference(self, expected_fields, actual_fields, optional=set()):
-        '''
-        Logs a warning when the expected fields don't align with the actual fields.
-        Optional fields are fields that may or may not exist.
-        '''
-        #TODO implement me
-        pass
+        missing_fields = expected_fields - actual_fields
+        if missing_fields:
+            message = 'missing fields: {}'.format(", ".join(missing_fields))
+            if message not in self.seen_field_warnings:
+                self.seen_field_warnings[message] = 0
+            self.seen_field_warnings[message] += 1
+        extra_fields = actual_fields - expected_fields - optional
+        if extra_fields:
+            message = 'extra fields: {}'.format(", ".join(extra_fields))
+            if message not in self.seen_field_warnings:
+                self.seen_field_warnings[message] = 0
+            self.seen_field_warnings[message] += 1
