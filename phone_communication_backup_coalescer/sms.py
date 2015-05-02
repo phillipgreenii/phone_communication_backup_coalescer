@@ -78,7 +78,7 @@ class SmsBackupControl:
                     logging.warn('unsupported tag: %s', elem.tag)
         return smses
 
-    def build_smses_tree(self, smses):
+    def build_tree(self, smses):
         root = ET.Element('smses', attrib={'count': str(len(smses))})
         for sms in smses:
             if type(sms) is SMS:

@@ -11,24 +11,12 @@ Licensed under MIT
 
 import unittest
 
+import tree_support
 from phone_communication_backup_coalescer.calls import CallsBackupControl, Call
 from phone_communication_backup_coalescer.utils import ParseSupport
 
-import StringIO
 
-
-class BuildTreeAssertions:
-
-    def assert_tree_as_string(self, tree, string):
-        string_stream = StringIO.StringIO()
-        tree.write(string_stream)
-
-        tree_as_string = string_stream.getvalue()
-        string_stream.close()
-        self.assertEqual(tree_as_string, string)#HACK
-
-
-class CallsBuildTreeTestCase(unittest.TestCase, BuildTreeAssertions):
+class CallsBuildTreeTestCase(unittest.TestCase, tree_support.BuildTreeAssertions):
 
     def setUp(self):
         self.backup_control = CallsBackupControl(ParseSupport())
