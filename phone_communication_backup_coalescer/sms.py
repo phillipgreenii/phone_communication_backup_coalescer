@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import collections
 import logging
+import operator
 
 
 sms_fields = set(['protocol', 'address', 'date', 'type', 'subject', 'body',
@@ -39,7 +40,11 @@ class SmsBackupControl:
 
     def __init__(self, parse_support):
         self.filename_pattern = 'sms*.xml'
+        self.xsl_file_name = 'sms.xsl'
         self._parse_support = parse_support
+
+    def sort(self, items):
+        return sorted(items, key=operator.attrgetter("date"))
 
     def parse_file(self, file_path):
         smses = []

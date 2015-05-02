@@ -1,3 +1,14 @@
+'''
+phone_communication_backup_coalescer: Test module.
+
+Meant for use with py.test.
+Write each test as a function named test_<something>.
+Read more here: http://pytest.org/
+
+Copyright 2015, Phillip Green II
+Licensed under MIT
+'''
+
 import StringIO
 
 
