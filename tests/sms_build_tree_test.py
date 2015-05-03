@@ -13,12 +13,11 @@ import unittest
 
 import tree_support
 from phone_communication_backup_coalescer.sms import SmsBackupControl, SMS, MMS, MMSPart, MMSAddress
-from phone_communication_backup_coalescer.utils import ParseSupport
 
 
 class SmsParseFileTestCase(unittest.TestCase, tree_support.BuildTreeAssertions):
     def setUp(self):
-        self.backup_control = SmsBackupControl(ParseSupport())
+        self.backup_control = SmsBackupControl()
 
     def test_build_tree_with_no_smses(self):
         smses = []

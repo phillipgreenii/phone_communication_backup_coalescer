@@ -16,12 +16,11 @@ import shutil
 import datetime
 
 import phone_communication_backup_coalescer.sms as sms
-from phone_communication_backup_coalescer.utils import ParseSupport
 
 
 class SmsParseFileTestCase(unittest.TestCase):
     def setUp(self):
-        self.backup_control = sms.SmsBackupControl(ParseSupport())
+        self.backup_control = sms.SmsBackupControl()
         self.temp_dir = tempfile.mkdtemp('sms-parse-file-test')
 
     def tearDown(self):

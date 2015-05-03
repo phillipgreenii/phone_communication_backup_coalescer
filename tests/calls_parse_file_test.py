@@ -16,12 +16,11 @@ import shutil
 import datetime
 
 from phone_communication_backup_coalescer.calls import CallsBackupControl, Call
-from phone_communication_backup_coalescer.utils import ParseSupport
 
 
 class CallsParseFileTestCase(unittest.TestCase):
     def setUp(self):
-        self.backup_control = CallsBackupControl(ParseSupport())
+        self.backup_control = CallsBackupControl()
         self.temp_dir = tempfile.mkdtemp('calls-parse-file-test')
 
     def tearDown(self):

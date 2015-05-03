@@ -6,7 +6,6 @@ import os
 
 import sms
 import calls
-import utils
 import coalesce
 
 
@@ -41,19 +40,17 @@ def cli(process_calls, process_smses, source_dir):
     infos = {}
 
     if process_calls:
-        infos['calls'] = CoalescerInfo(calls.CallsBackupControl(utils.ParseSupport()), 'coalesced-calls.xml')
+        infos['calls'] = CoalescerInfo(calls.CallsBackupControl(), 'coalesced-calls.xml')
 
     if process_smses:
-        infos['smses'] = CoalescerInfo(sms.SmsBackupControl(utils.ParseSupport()), 'coalesced-smses.xml')
+        infos['smses'] = CoalescerInfo(sms.SmsBackupControl(), 'coalesced-smses.xml')
 
     for key, info in infos.items():
         logging.info('Coalescing %s', key)
         coalescer = coalesce.Coalescer(info.controller)
         coalescer.coalesce(source_dir, info.output_file_name)
-
-        # FIXME: we shouldn't need to dig so deep for warnings
-        for message, count in info.controller._parse_support.seen_field_warnings.items():
-            logging.warn("%s: %i", message, count)
+        for warning, count in info.controller.warnings():
+            logging.warn("%s: %i", warning, count)
 
 
 def run(args):

@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import collections
 import logging
 import operator
-
+import utils
 
 sms_fields = set(['protocol', 'address', 'date', 'type', 'subject', 'body',
                   'toa', 'sc_toa', 'service_center', 'read', 'status',
@@ -38,10 +38,10 @@ def _build_mms(fields, parts, addresses):
 
 class SmsBackupControl:
 
-    def __init__(self, parse_support):
+    def __init__(self):
         self.filename_pattern = 'sms*.xml'
         self.xsl_file_name = 'sms.xsl'
-        self._parse_support = parse_support
+        self._parse_support = utils.ParseSupport()
 
     def sort(self, items):
         return sorted(items, key=operator.attrgetter("date"))
@@ -120,3 +120,6 @@ class SmsBackupControl:
                 raise Exception("unsupported sms type: %s", sms)
         tree = ET.ElementTree(root)
         return tree
+
+    def warnings(self):
+        return self._parse_support.items()

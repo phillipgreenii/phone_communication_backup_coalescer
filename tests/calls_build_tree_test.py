@@ -13,13 +13,12 @@ import unittest
 
 import tree_support
 from phone_communication_backup_coalescer.calls import CallsBackupControl, Call
-from phone_communication_backup_coalescer.utils import ParseSupport
 
 
 class CallsBuildTreeTestCase(unittest.TestCase, tree_support.BuildTreeAssertions):
 
     def setUp(self):
-        self.backup_control = CallsBackupControl(ParseSupport())
+        self.backup_control = CallsBackupControl()
 
     def test_build_tree_with_no_calls(self):
         calls = []

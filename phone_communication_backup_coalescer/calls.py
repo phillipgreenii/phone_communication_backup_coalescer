@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import collections
 import logging
 import operator
-
+import utils
 
 call_fields = set(['number', 'duration', 'date', 'type', 'readable_date',
                    'contact_name'])
@@ -12,10 +12,10 @@ Call = collections.namedtuple('Call', call_fields)
 
 class CallsBackupControl:
 
-    def __init__(self, parse_support):
+    def __init__(self):
         self.filename_pattern = 'calls*.xml'
         self.xsl_file_name = 'cals.xsl'
-        self._parse_support = parse_support
+        self._parse_support = utils.ParseSupport()
 
     def sort(self, items):
         return sorted(items, key=operator.attrgetter("date"))
@@ -41,3 +41,6 @@ class CallsBackupControl:
             ET.SubElement(root, 'call', attrib=call._asdict())
         tree = ET.ElementTree(root)
         return tree
+
+    def warnings(self):
+        return self._parse_support.items()
