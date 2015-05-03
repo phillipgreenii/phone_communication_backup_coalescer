@@ -72,9 +72,15 @@ setup(
 
     install_requires=[],
 
+    entry_points={
+        'console_scripts': [
+            'phone_communication_backup_coalescer = phone_communication_backup_coalescer.__main__:main',
+        ],
+    },
+
     tests_require=['pytest', 'pytest-cov'],
     cmdclass={'test': PyTest},
 
-    extras_require = {
+    extras_require={
     }
 )

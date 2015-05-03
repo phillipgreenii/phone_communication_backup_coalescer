@@ -13,15 +13,36 @@ This project takes multiple backup files and coalesces them into a single backup
 Installation
 ------------
 
-The easiest way to install most Python packages is via ``easy_install`` or ``pip``::
+The easiest way to install most Python packages is via ``easy_install`` or ``pip``:
+
+.. code-block:: bash
 
   $ easy_install phone_communication_backup_coalescer
 
-  Usage
-  -----
+Usage
+-----
 
-    >> phone_communication_backup_coalescer [--no-sms] [--no-calls] rootDirectoryToSearch+
+.. code-block:: bash
 
+  $ phone_communication_backup_coalescer [--no-sms] [--no-calls] rootDirectoryToSearch
+
+
+Development
+-----------
+
+Run Tests
+^^^^^^^^^
+
+.. code-block:: bash
+
+  $ python setup.py test
+
+Install
+^^^^^^^
+
+.. code-block:: bash
+
+  $ python setup.py develop
 
 Copyright & License
 -------------------
