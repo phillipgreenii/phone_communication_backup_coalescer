@@ -16,6 +16,7 @@ import shutil
 import datetime
 
 import phone_communication_backup_coalescer.sms as sms
+from phone_communication_backup_coalescer.utils import ParseWarning
 
 
 class SmsParseFileTestCase(unittest.TestCase):
@@ -834,6 +835,14 @@ class SmsParseFileTestCase(unittest.TestCase):
                     charset='106',
                     type='151',
                     address='+15555550001'))))
+
+    def test_parse_file_warnings(self):
+        expected_warnings = [(ParseWarning.missing_fields(['spam_report', 'sim_slot', 'creator', 'sub_id', 'sim_imsi', 'safe_message']), 8)]
+
+        full_file_name = os.path.join('tests', 'data', 'sms-test.xml')
+        self.backup_control.parse_file(full_file_name)
+
+        self.assertEquals(self.backup_control.warnings(), expected_warnings)
 
 if __name__ == '__main__':
     unittest.main()

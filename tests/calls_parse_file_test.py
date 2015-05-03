@@ -189,6 +189,13 @@ class CallsParseFileTestCase(unittest.TestCase):
                                         contact_name='John Stuart',
                                         type='1'))
 
+    def test_parse_file_warnings(self):
+        expected_warnings = []
+
+        full_file_name = os.path.join('tests', 'data', 'sms-test.xml')
+        self.backup_control.parse_file(full_file_name)
+
+        self.assertEquals(self.backup_control.warnings(), expected_warnings)
 
 if __name__ == '__main__':
     unittest.main()
