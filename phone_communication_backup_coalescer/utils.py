@@ -1,3 +1,4 @@
+# TODO add support for tracking by files and perhaps element index
 class ParseSupport:
 
     def __init__(self):
