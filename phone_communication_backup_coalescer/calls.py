@@ -14,7 +14,7 @@ class CallsBackupControl:
 
     def __init__(self):
         self.filename_pattern = 'calls*.xml'
-        self.xsl_file_name = 'cals.xsl'
+        self.xsl_file_name = 'calls.xsl'
         self._parse_support = utils.ParseSupport()
 
     def sort(self, items):

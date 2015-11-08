@@ -32,6 +32,10 @@ mmsaddr_fields = required_mmsaddr_fields | optional_mmsaddr_fields
 MMSAddress = collections.namedtuple('MMSAddress', mmsaddr_fields)
 
 
+def as_dict_with_out_nones(named_tuple):
+    return {k: v for k, v in named_tuple._asdict().items() if v is not None}
+
+
 def _build_mms(fields, parts, addresses):
     return MMS(*(fields + [tuple(parts), tuple(addresses)]))
 
@@ -87,34 +91,20 @@ class SmsBackupControl:
         root = ET.Element('smses', attrib={'count': str(len(smses))})
         for sms in smses:
             if type(sms) is SMS:
-                attrs = dict(sms._asdict())
+                attrs = as_dict_with_out_nones(sms)
                 ET.SubElement(root, 'sms', attrib=attrs)
             elif type(sms) is MMS:
-                attrs = dict(sms._asdict())
+                attrs = as_dict_with_out_nones(sms)
                 del attrs['parts']
                 del attrs['addresses']
-                if attrs['sim_imsi'] is None:
-                    del attrs['sim_imsi']
-                if attrs['spam_report'] is None:
-                    del attrs['spam_report']
-                if attrs['sim_slot'] is None:
-                    del attrs['sim_slot']
-                if attrs['sub_id'] is None:
-                    del attrs['sub_id']
-                if attrs['safe_message'] is None:
-                    del attrs['safe_message']
-                if attrs['creator'] is None:
-                    del attrs['creator']
                 mms = ET.SubElement(root, 'mms', attrib=attrs)
                 parts = ET.SubElement(mms, 'parts')
                 for part in sms.parts:
-                    attrs = dict(part._asdict())
-                    if attrs['data'] is None:
-                        del attrs['data']
+                    attrs = as_dict_with_out_nones(part)
                     ET.SubElement(parts, 'part', attrib=attrs)
                 addresses = ET.SubElement(mms, 'addresses')
                 for address in sms.addresses:
-                    attrs = dict(address._asdict())
+                    attrs = as_dict_with_out_nones(address)
                     ET.SubElement(addresses, 'address', attrib=attrs)
             else:
                 raise Exception("unsupported sms type: %s", sms)
