@@ -2,3 +2,5 @@
 *.pyc
 *.egg
 .coverage
+.cache/
+.eggs/

@@ -4,9 +4,10 @@ phone_communication_backup_coalescer: Coalesces communication backup files.
 Note that "python setup.py test" invokes pytest on the package. With appropriately
 configured setup.cfg, this will check both xxx_test modules and docstrings.
 
-Copyright 2015, Phillip Green II.
+Copyright 2016, Phillip Green II.
 Licensed under MIT.
 '''
+
 from codecs import open
 from os import path
 import sys
@@ -14,6 +15,7 @@ import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
+from phone_communication_backup_coalescer import __version__, __name__
 
 # This is a plug-in for setuptools that will invoke py.test
 # when you run python setup.py test
@@ -33,9 +35,9 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='phone_communication_backup_coalescer',
+    name=__name__,
 
-    version='0.1.0',
+    version=__version__,
 
     description='Coalesces communication backup files.',
     long_description=long_description,
@@ -70,7 +72,7 @@ setup(
 
     include_package_data=True,
 
-    install_requires=[],
+    install_requires=['rx'],
 
     entry_points={
         'console_scripts': [

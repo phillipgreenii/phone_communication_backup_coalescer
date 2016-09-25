@@ -30,6 +30,12 @@ Usage
 Development
 -----------
 
+For consistency, development is done with a docker container that mounts the source code:
+
+.. code-block:: bash
+
+  $ docker run -it -v $(pwd):/src python:2.7.12 /bin/bash
+
 Run Tests
 ^^^^^^^^^
 
@@ -47,5 +53,5 @@ Install
 Copyright & License
 -------------------
 
-  - Copyright 2015, Phillip Green II
+  - Copyright 2016, Phillip Green II
   - License: MIT

@@ -1,6 +1,11 @@
+'''
+phone_communication_backup_coalescer
+Copyright 2016, Phillip Green II
+Licensed under MIT.
+'''
+
 import xml.etree.ElementTree as ET
 import collections
-import logging
 import operator
 import utils
 
@@ -17,30 +22,30 @@ class CallsBackupControl:
         self.xsl_file_name = 'calls.xsl'
         self._parse_support = utils.ParseSupport()
 
-    def sort(self, items):
-        return sorted(items, key=operator.attrgetter("date"))
-
     def parse_file(self, file_path):
-        calls = []
         with open(file_path) as f:
             for (_, elem) in ET.iterparse(f):
                 fields = set(elem.keys())
                 if elem.tag == 'call':
-                    self._parse_support.mark_field_difference(call_fields, fields)
+                    for warning in self._parse_support.mark_field_difference(call_fields, fields):
+                        yield {'type': 'warning', 'value': warning}
                     fields = map(elem.get, call_fields)
-                    calls.append(Call(*fields))
+                    yield {'type':'item', 'value': Call(*fields)}
                 elif elem.tag == 'calls':
                     pass
                 else:
-                    logging.warn('unsupported tag: %s', elem.tag)
-        return calls
+                    yield {'type': 'warning', 'value': 'unsupported calls tag: %s' % elem.tag}
 
-    def build_tree(self, calls):
-        root = ET.Element('calls', attrib={'count': str(len(calls))})
-        for call in calls:
-            ET.SubElement(root, 'call', attrib=call._asdict())
+    def sort(self, items):
+        return sorted(items, key=lambda i: i.date)
+
+    def tree_seed(self):
+        root = ET.Element('calls', attrib={'count': '0'})
         tree = ET.ElementTree(root)
         return tree
 
-    def warnings(self):
-        return self._parse_support.items()
+    def tree_appender(self, tree, call):
+        root = tree.getroot()
+        subelement = ET.SubElement(root, 'call', attrib=call._asdict())
+        root.set('count', str(int(root.get('count', '0')) + 1))
+        return subelement

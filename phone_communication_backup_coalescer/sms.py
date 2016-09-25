@@ -1,6 +1,11 @@
+'''
+phone_communication_backup_coalescer
+Copyright 2016, Phillip Green II
+Licensed under MIT.
+'''
+
 import xml.etree.ElementTree as ET
 import collections
-import logging
 import operator
 import utils
 
@@ -51,65 +56,72 @@ class SmsBackupControl:
         return sorted(items, key=operator.attrgetter("date"))
 
     def parse_file(self, file_path):
-        smses = []
         parts = []
         addresses = []
         with open(file_path) as f:
             for (_, elem) in ET.iterparse(f):
                 fields = set(elem.keys())
                 if elem.tag == 'sms':
-                    self._parse_support.mark_field_difference(sms_fields, fields)
+                    for warning in self._parse_support.mark_field_difference(sms_fields, fields):
+                        yield {'type': 'warning', 'value': warning}
                     fields = map(elem.get, sms_fields)
-                    smses.append(SMS(*fields))
+                    yield {'type':'item', 'value': SMS(*fields)}
                 elif elem.tag == 'part':
-                    self._parse_support.mark_field_difference(required_mmspart_fields, fields, optional=optional_mmspart_fields)
+                    for warning in self._parse_support.mark_field_difference(required_mmspart_fields, fields, optional=optional_mmspart_fields):
+                        yield {'type': 'warning', 'value': warning}
                     fields = map(elem.get, mmspart_fields)
                     parts.append(MMSPart(*fields))
                 elif elem.tag == 'parts':
-                    self._parse_support.mark_field_difference(set(), fields)
-                    pass
+                    for warning in self._parse_support.mark_field_difference(set(), fields):
+                        yield {'type': 'warning', 'value': warning}
                 elif elem.tag == 'addr':
-                    self._parse_support.mark_field_difference(required_mmsaddr_fields, fields, optional=optional_mmsaddr_fields)
+                    for warning in self._parse_support.mark_field_difference(required_mmsaddr_fields, fields, optional=optional_mmsaddr_fields):
+                        yield {'type': 'warning', 'value': warning}
                     fields = map(elem.get, mmsaddr_fields)
                     addresses.append(MMSAddress(*fields))
                 elif elem.tag == 'addrs':
-                    self._parse_support.mark_field_difference(set(), fields)
-                    pass
+                    for warning in self._parse_support.mark_field_difference(set(), fields):
+                        yield {'type': 'warning', 'value': warning}
                 elif elem.tag == 'mms':
-                    self._parse_support.mark_field_difference(mms_fields, fields)
+                    for warning in self._parse_support.mark_field_difference(mms_fields, fields):
+                        yield {'type': 'warning', 'value': warning}
                     fields = map(elem.get, mms_fields)
-                    smses.append(_build_mms(fields, parts, addresses))
+                    yield {'type':'item', 'value': _build_mms(fields, parts, addresses)}
                     parts = []
                     addresses = []
                 elif elem.tag == 'smses':
                     pass
                 else:
-                    logging.warn('unsupported tag: %s', elem.tag)
-        return smses
+                    yield {'type': 'warning', 'value': 'unsupported smses tag: %s' % elem.tag}
 
-    def build_tree(self, smses):
-        root = ET.Element('smses', attrib={'count': str(len(smses))})
-        for sms in smses:
-            if type(sms) is SMS:
-                attrs = as_dict_with_out_nones(sms)
-                ET.SubElement(root, 'sms', attrib=attrs)
-            elif type(sms) is MMS:
-                attrs = as_dict_with_out_nones(sms)
-                del attrs['parts']
-                del attrs['addresses']
-                mms = ET.SubElement(root, 'mms', attrib=attrs)
-                parts = ET.SubElement(mms, 'parts')
-                for part in sms.parts:
-                    attrs = as_dict_with_out_nones(part)
-                    ET.SubElement(parts, 'part', attrib=attrs)
-                addresses = ET.SubElement(mms, 'addresses')
-                for address in sms.addresses:
-                    attrs = as_dict_with_out_nones(address)
-                    ET.SubElement(addresses, 'address', attrib=attrs)
-            else:
-                raise Exception("unsupported sms type: %s", sms)
+    def sort(self, items):
+        return sorted(items, key=lambda i: i.date)
+
+    def tree_seed(self):
+        root = ET.Element('smses', attrib={'count': '0'})
         tree = ET.ElementTree(root)
         return tree
 
-    def warnings(self):
-        return self._parse_support.items()
+    def tree_appender(self, tree, smsOrMms):
+        root = tree.getroot()
+        if type(smsOrMms) is SMS:
+            attrs = as_dict_with_out_nones(smsOrMms)
+            subelement = ET.SubElement(root, 'sms', attrib=attrs)
+        elif type(smsOrMms) is MMS:
+            attrs = as_dict_with_out_nones(smsOrMms)
+            del attrs['parts']
+            del attrs['addresses']
+            mms = ET.SubElement(root, 'mms', attrib=attrs)
+            parts = ET.SubElement(mms, 'parts')
+            for part in smsOrMms.parts:
+                attrs = as_dict_with_out_nones(part)
+                ET.SubElement(parts, 'part', attrib=attrs)
+            addresses = ET.SubElement(mms, 'addresses')
+            for address in smsOrMms.addresses:
+                attrs = as_dict_with_out_nones(address)
+                ET.SubElement(addresses, 'address', attrib=attrs)
+            subelement = mms
+        else:
+            raise Exception("unsupported sms type: %s", smsOrMms)
+        root.set('count', str(int(root.get('count', '0')) + 1))
+        return subelement
