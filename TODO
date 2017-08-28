@@ -1,0 +1,3 @@
+verify data in tests is correct
+remove formatted date from properties (just regenerate it based upon timestamp); DEFERRED because it seems the timestamp is in local time, not GMT, so reformatting gains nothing
+print warnings (need to agregate by count per file)
