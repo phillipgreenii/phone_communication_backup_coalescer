@@ -7,3 +7,8 @@ Version 0.2
 -----------
 
     - Refactor to be built upon RX
+
+Version 0.3
+-----------
+
+    - Use GitHub actions instead of travis
