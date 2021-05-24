@@ -32,7 +32,7 @@ For consistency, development is done with a docker container that mounts the sou
 
 .. code-block:: bash
 
-  $ docker run -it -v $(pwd):/src python:2.7.12 /bin/bash
+  $ docker run -it -v $(pwd):/src python:3.9 /bin/bash
 
 Run Tests
 ^^^^^^^^^
