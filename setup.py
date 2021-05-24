@@ -81,8 +81,5 @@ setup(
     },
 
     tests_require=['pytest', 'pytest-cov'],
-    cmdclass={'test': PyTest},
-
-    extras_require={
-    }
+    cmdclass={'test': PyTest}
 )
