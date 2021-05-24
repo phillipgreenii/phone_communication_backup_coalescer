@@ -12,3 +12,4 @@ Version 0.3
 -----------
 
     - Use GitHub actions instead of travis
+    - Upgrade to python 3

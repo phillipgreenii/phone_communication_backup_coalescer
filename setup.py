@@ -62,8 +62,8 @@ setup(
         'License :: OSI Approved :: MIT License',
 
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7'
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.9'
     ],
 
     keywords='backup sms calls android coalesce',
@@ -72,7 +72,7 @@ setup(
 
     include_package_data=True,
 
-    install_requires=['rx<3'],
+    install_requires=['rx>=3'],
 
     entry_points={
         'console_scripts': [
