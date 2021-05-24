@@ -2,9 +2,7 @@
 phone_communication_backup_coalescer: Coalesces communication backup files.
 ===========================================================================
 
-.. image:: https://travis-ci.org/phillipgreenii/phone_communication_backup_coalescer.svg
-    :target: https://travis-ci.org/phillipgreenii/phone_communication_backup_coalescer
-    :alt: Build Status
+![Build](https://github.com/phillipgreenii/phone_communication_backup_coalescer/actions/workflows/main.yml/badge.svg)
 
 This project takes multiple backup files and coalesces them into a single backup file.  It currently supports
  - `SMSBackupRestore <https://play.google.com/store/apps/details?id=com.riteshsahu.SMSBackupRestore>`_ for SMS
