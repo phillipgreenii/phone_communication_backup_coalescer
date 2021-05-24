@@ -72,7 +72,7 @@ setup(
 
     include_package_data=True,
 
-    install_requires=['rx'],
+    install_requires=['rx<3'],
 
     entry_points={
         'console_scripts': [
