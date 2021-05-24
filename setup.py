@@ -72,7 +72,7 @@ setup(
 
     include_package_data=True,
 
-    install_requires=['rx'],
+    install_requires=['rx<3'],
 
     entry_points={
         'console_scripts': [
@@ -81,5 +81,8 @@ setup(
     },
 
     tests_require=['pytest', 'pytest-cov'],
-    cmdclass={'test': PyTest}
+    cmdclass={'test': PyTest},
+
+    extras_require={
+    }
 )
